@@ -1,0 +1,29 @@
+{
+  "name": "jmd",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "jsdom": "^11.11.0",
+    "showdown": "^1.8.6",
+    "sinon": "^6.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giuliojiang/jmd.git"
+  },
+  "author": "giuliojiang",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/giuliojiang/jmd/issues"
+  },
+  "homepage": "https://github.com/giuliojiang/jmd#readme"
+}
