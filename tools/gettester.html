@@ -1,0 +1,20 @@
+<html>
+
+    <head>
+
+        <script>
+        
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    console.info("Response receieved" + xhr.responseText);
+                }
+            }
+            xhr.open('GET', 'http://localhost:3000/example/path/js.js', true);
+            xhr.send("This here is the body of the request yahhrrrrrr");
+        
+        </script>
+
+    </head>
+
+</html>
