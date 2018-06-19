@@ -1,8 +1,8 @@
 var expressresponse = require("./expressresponse.js");
 var pathutils = require("./pathutils.js");
 var path = require("path");
-var config = require("config.js");
-var transformer = require("transformer.js");
+var config = require("./config.js");
+var transformer = require("./transformer.js");
 
 // ============================================================================
 module.exports.sanitizePath = function(path) {
@@ -29,18 +29,20 @@ module.exports.handleGet = function(routePath, res) {
         return;
     }
 
+    // To project path
+    var filePath = pathutils.wwwPathSafe(filePath);
+
     // Check if the path is a directory
     var stats;
     try {
         stats = pathutils.statSync(filePath);
     } catch (err) {
-        expressresponse.send404(res);
-        return;
+        stats = null;
     }
 
-    if (stats.isDirectory()) {
+    if (stats && stats.isDirectory()) {
         module.exports.handleDirectory(filePath, res);
-    } else if (stats.isFile()) {
+    } else {
         module.exports.handleFile(filePath, res);
     }
 
@@ -67,7 +69,7 @@ module.exports.handleFile = function(fileRoute, res) {
     try {
         stats = pathutils.statSync(filePath);
     } catch (err) {
-        res.send404(res);
+        expressresponse.send404(res);
         return;
     }
 
