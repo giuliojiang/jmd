@@ -1,7 +1,6 @@
 var path = require("path");
 var fs = require("fs");
 var path = require("path");
-var config = require("./config");
 
 var rootDir = __dirname;
 
@@ -42,27 +41,15 @@ module.exports.projectPathSafe = function(inpath) {
     }
 };
 
-module.exports.wwwPathSafe = function(inpath) {
+module.exports.wwwPathSafe = function(wwwDir, inpath) {
     inpath = inpath.split("..").join("");
     if (inpath.startsWith("/")) {
         return "";
     } else {
-        return path.join(d.wwwDir, inpath);
+        return path.join(wwwDir, inpath);
     }
 };
 
 module.exports.replace = function(s, match, rep) {
     return s.split(match).join(rep);
 };
-
-// ============================================================================
-
-var init = function() {
-
-    d.wwwDir = module.exports.projectPathUnsafe(
-        config.www
-    );
-
-};
-
-init();
