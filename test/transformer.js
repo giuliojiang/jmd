@@ -48,31 +48,34 @@ describe("transformer.js", function() {
 
     });
 
-    // TODO
-    // MD file not exists
-    // HTML malformed
-    // MD malformed
+    it("returns empty when MD file does not exist", function() {
+        var pathutilsReadFileString = pathutils.readFileString;
+        sandbox.stub(pathutils, "readFileString").callsFake(function(fpath) {
+            if (fpath == "path1") {
+                return pathutilsReadFileString(path.join(rootDir, "etc", "template.html"));
+            } else {
+                throw "Not stubbed ["+ fpath +"]";
+            }
+        });
+
+        var output = transformer.process("path1", "faser");
+        assert.deepEqual(output, "");
+    });
+
+    it("returns empty when HTML template malformed", function() {
+        var pathutilsReadFileString = pathutils.readFileString;
+        sandbox.stub(pathutils, "readFileString").callsFake(function(fpath) {
+            if (fpath == "path1") { // HTML
+                return "fosijfop j<htm??>ml> fjij?j </thmL.M> javascript\nrubbish\nfaser";
+            } else if (fpath == "path2") {
+                return pathutilsReadFileString(path.join(rootDir, "etc", "www", "index.md"));
+            } else {
+                throw "Not stubbed ["+ fpath +"]";
+            }
+        });
+
+        var output = transformer.process("path1", "path2");
+        assert.deepEqual(output, "");
+    });
 
 });
-
-
-
-
-// // in your testfile
-// var innerLib  = require('./path/to/innerLib');
-// var underTest = require('./path/to/underTest');
-// var sinon     = require('sinon');
-
-// describe("underTest", function() {
-//   it("does something", function() {
-//     sinon.stub(innerLib, 'toCrazyCrap', function() {
-//       // whatever you would like innerLib.toCrazyCrap to do under test
-//     });
-
-//     underTest();
-
-//     sinon.assert.calledOnce(innerLib.toCrazyCrap); // sinon assertion
-
-//     innerLib.toCrazyCrap.restore(); // restore original functionality
-//   });
-// });

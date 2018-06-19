@@ -6,20 +6,8 @@ var fs = require("fs");
 //     exists
 //     isfile
 // }
-module.exports.fileProperties = function(filePath) {
-
-    try {
-        var stats = fs.statSync();
-        return {
-            exists: true,
-            isfile: stats.isFile()
-        };
-    } catch (err) {
-        return {
-            exists: false
-        };
-    }
-
+module.exports.statSync = function(filePath) {
+    return fs.statSync(filePath);
 };
 
 // Return string, or throws exception
