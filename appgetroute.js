@@ -5,21 +5,31 @@ var transformer = require("./transformer.js");
 
 // ============================================================================
 module.exports.sanitizePath = function(path) {
-    // Remove double paths
-    path = pathutils.replace(path, "//", "/");
 
-    if (path.startsWith("/")) {
-        // Attempts at absolute paths are rejected
-        return "";
+    try {
+        // Remove double paths
+        path = pathutils.replace(path, "//", "/");
+
+        // Remove ..
+        path = pathutils.replace(path, "..", "");
+
+        if (path.startsWith("/")) {
+            // Attempts at absolute paths are rejected
+            return "";
+        }
+
+        return path;
+    } catch (err) {
+        return null;
     }
-
-    // Remove ..
-    path = pathutils.replace(path, "..", "");
-
-    return path;
 };
 
 module.exports.handleGet = function(context, routePath, res) {
+
+    // Check validity of context
+    if (!context || !context.www || !context.template) {
+        throw Error("appgetroute.js:handleGet context is invalid. Context must be an object with www and template keys");
+    }
 
     // Sanitize the path
     var filePath = module.exports.sanitizePath(routePath);

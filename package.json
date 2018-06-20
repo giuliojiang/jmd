@@ -8,6 +8,7 @@
     "chai": "^4.1.2",
     "express": "^4.16.3",
     "jsdom": "^11.11.0",
+    "nyc": "^12.0.2",
     "showdown": "^1.8.6",
     "sinon": "^6.0.0"
   },
@@ -15,7 +16,7 @@
     "mocha": "^5.2.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "nyc --reporter=html mocha --timeout=3000"
   },
   "repository": {
     "type": "git",
