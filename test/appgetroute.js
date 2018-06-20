@@ -147,6 +147,27 @@ describe("appgetroute.js", function() {
 
         });
 
+        it("attempts to handle the file when file does not exist", function() {
+
+            fakes.pathutils = {};
+            fakes.appgetroute = {};
+
+            fakes.pathutils.statSync = sinon.fake(function(filePath) {
+                throw Error("File does not exist");
+            });
+            sinon.replace(pathutils, "statSync", fakes.pathutils.statSync);
+
+            fakes.appgetroute.handleFile = sinon.fake();
+            sinon.replace(appgetroute, "handleFile", fakes.appgetroute.handleFile);
+
+            appgetroute.handleGet(d.context, "somefile", d.res);
+
+            var callargs = fakes.appgetroute.handleFile.getCall(0).args;
+            var argfileroute = callargs[1];
+            expect(argfileroute).to.deep.equal("some/www/path/somefile");
+
+        });
+
     });
 
 });
