@@ -51,9 +51,18 @@ module.exports.handleGet = function(context, routePath, res) {
 
     if (stats && stats.isDirectory()) {
         module.exports.handleDirectory(context, filePath, res);
+    } else if (stats && stats.isFile()) {
+        module.exports.handleRawFile(context, filePath, res);
     } else {
-        module.exports.handleFile(context, filePath, res);
+        module.exports.handlePage(context, filePath, res);
     }
+
+};
+
+// ============================================================================
+module.exports.handleRawFile = function(context, filePath, res) {
+
+    expressresponse.sendFile(res, filePath);
 
 };
 
@@ -63,12 +72,12 @@ module.exports.handleDirectory = function(context, dirPath, res) {
     // Append a index at the end
     var filePath = path.join(dirPath, "index");
 
-    module.exports.handleFile(context, filePath, res);
+    module.exports.handlePage(context, filePath, res);
 
 };
 
 // ============================================================================
-module.exports.handleFile = function(context, fileRoute, res) {
+module.exports.handlePage = function(context, fileRoute, res) {
 
     // Append a .md
     var filePath = fileRoute + ".md";
