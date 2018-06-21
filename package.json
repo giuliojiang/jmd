@@ -2,7 +2,7 @@
   "name": "jmd",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",

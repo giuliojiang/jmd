@@ -3,6 +3,11 @@ var bodyParser = require('body-parser');
 const appgetroute = require("./appgetroute.js");
 var config = require("./config.js");
 
+// configData should be an object like
+// {
+//     template: "path",
+//     www: "path"
+// }
 module.exports.createApp = function(configData) {
 
     var context = {};
