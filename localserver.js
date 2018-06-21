@@ -1,14 +1,12 @@
-// Paths can be relative to this directory,
-// or absolute if they start with a /
-var configData = {
+var jmd = require("./app.js");
+const express = require('express')
+const app = express()
+
+var config = {
     template: "etc/template.html",
     www: "etc/www"
-}
+};
 
-var app = require("./app.js").createApp(configData);
+app.use('/', jmd.createApp(config));
 
-const PORT = 3000;
-
-app.listen(PORT, function() {
-    console.info("Listening on port " + PORT);
-});
+app.listen(3000, () => console.log('Example app listening on port 3000!'))

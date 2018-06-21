@@ -16,11 +16,19 @@ module.exports.createApp = function(configData) {
     
     var app = express();
 
+    // app.use(function(req, res, next) {
+    //     if (req.originalUrl != req.baseUrl + req.url) {
+    //         res.redirect(301, req.baseUrl + req.url);
+    //     }
+    //     else
+    //         next();
+    // });
+
     app.use(bodyParser.text());
 
     app.get("/*", function(req, res) {
         var routePath = req.params[0];
-        appgetroute.handleGet(context, routePath, res);
+        appgetroute.handleGet(context, req, routePath, res);
     });
 
     return app;

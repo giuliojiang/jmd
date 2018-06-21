@@ -14,3 +14,7 @@ module.exports.sendResponse = function(res, text) {
 module.exports.sendFile = function(res, filepath) {
     res.sendFile(filepath);
 };
+
+module.exports.redirect = function(res, newPath) {
+    res.redirect(newPath);
+};

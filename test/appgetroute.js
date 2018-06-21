@@ -22,6 +22,11 @@ describe("appgetroute.js", function() {
 
         d.res = {};
 
+        d.req = {
+            baseUrl: "/blog",
+            url: "/"
+        };
+
         fakes.expressresponse = {};
         
         fakes.expressresponse.send404 = sinon.fake();
@@ -98,14 +103,14 @@ describe("appgetroute.js", function() {
             var res = null;
 
             expect(function() {
-                appgetroute.handleGet(context, routePath, res)
+                appgetroute.handleGet(context, d.req, routePath, res)
             }).to.throw();
 
         });
 
         it("sends 404 with invalid path", function() {
             
-            appgetroute.handleGet(d.context, ["this is not a string"], d.res);
+            appgetroute.handleGet(d.context, d.req, ["this is not a string"], d.res);
 
             expect(fakes.expressresponse.send404.called).to.be.true;
 
@@ -113,13 +118,13 @@ describe("appgetroute.js", function() {
 
         it("sends 404 with null path", function() {
 
-            appgetroute.handleGet(d.context, null, d.res);
+            appgetroute.handleGet(d.context, d.req, null, d.res);
 
             expect(fakes.expressresponse.send404.called).to.be.true;
 
         });
 
-        it("handles index page when path is empty", function() {
+        it("redirects to index page when path is empty", function() {
 
             // With empty path, we get just the target www directory
             fakes.pathutils.statSync = sinon.fake(function(filepath) {
@@ -131,17 +136,22 @@ describe("appgetroute.js", function() {
             });
             sinon.replace(pathutils, "statSync", fakes.pathutils.statSync);
 
-            // We want handleDirectory to be called
-            fakes.appgetroute.handleDirectory = sinon.fake();
-            sinon.replace(appgetroute, "handleDirectory", fakes.appgetroute.handleDirectory);
+            // Mock redirect
+            fakes.expressresponse.redirect = sinon.fake();
+            sinon.replace(expressresponse, "redirect", fakes.expressresponse.redirect);
 
             // We don't want handlePage to be called
             fakes.appgetroute.handlePage = sinon.fake();
             sinon.replace(appgetroute, "handlePage", fakes.appgetroute.handlePage);
 
-            appgetroute.handleGet(d.context, "", d.res);
+            var req = {
+                baseUrl: "/blog",
+                url: ""
+            };
+            appgetroute.handleGet(d.context, req, "", d.res);
 
-            expect(fakes.appgetroute.handleDirectory.called).to.be.true;
+            var redirectArgs = fakes.expressresponse.redirect.getCall(0).args;
+            console.info("redirectargs are " + JSON.stringify(redirectArgs));
             expect(fakes.appgetroute.handlePage.called).to.be.false;
 
         });
@@ -156,7 +166,7 @@ describe("appgetroute.js", function() {
             fakes.appgetroute.handlePage = sinon.fake();
             sinon.replace(appgetroute, "handlePage", fakes.appgetroute.handlePage);
 
-            appgetroute.handleGet(d.context, "somefile", d.res);
+            appgetroute.handleGet(d.context, d.req, "somefile", d.res);
 
             var callargs = fakes.appgetroute.handlePage.getCall(0).args;
             var argfileroute = callargs[1];
@@ -179,26 +189,9 @@ describe("appgetroute.js", function() {
             sinon.replace(pathutils, "statSync", fakes.pathutils.statSync);
 
             var routePath = "lib/somelib.js";
-            var output = appgetroute.handleGet(d.context, routePath, d.res);
+            var output = appgetroute.handleGet(d.context, d.req, routePath, d.res);
 
             expect(fakes.expressresponse.sendFile.called).to.be.true;
-
-        });
-
-    });
-
-    describe("handleDirectory", function() {
-
-        it("uses handlefile with index file", function() {
-
-            fakes.appgetroute.handlePage = sinon.fake();
-            sinon.replace(appgetroute, "handlePage", fakes.appgetroute.handlePage);
-
-            var dirPath = "blog/pages/";
-
-            appgetroute.handleDirectory(d.context, dirPath, d.res);
-
-            expect(fakes.appgetroute.handlePage.called).to.be.true;
 
         });
 

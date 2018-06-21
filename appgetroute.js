@@ -24,11 +24,15 @@ module.exports.sanitizePath = function(path) {
     }
 };
 
-module.exports.handleGet = function(context, routePath, res) {
+module.exports.handleGet = function(context, req, routePath, res) {
 
     // Check validity of context
     if (!context || !context.www || !context.template) {
         throw Error("appgetroute.js:handleGet context is invalid. Context must be an object with www and template keys");
+    }
+
+    if (!res) {
+        throw Error("res is null/undefined");
     }
 
     // Sanitize the path
@@ -50,7 +54,8 @@ module.exports.handleGet = function(context, routePath, res) {
     }
 
     if (stats && stats.isDirectory()) {
-        module.exports.handleDirectory(context, filePath, res);
+        var newPath = req.baseUrl + req.url + "index";
+        expressresponse.redirect(res, newPath);
     } else if (stats && stats.isFile()) {
         module.exports.handleRawFile(context, filePath, res);
     } else {
@@ -63,16 +68,6 @@ module.exports.handleGet = function(context, routePath, res) {
 module.exports.handleRawFile = function(context, filePath, res) {
 
     expressresponse.sendFile(res, filePath);
-
-};
-
-// ============================================================================
-module.exports.handleDirectory = function(context, dirPath, res) {
-
-    // Append a index at the end
-    var filePath = path.join(dirPath, "index");
-
-    module.exports.handlePage(context, filePath, res);
 
 };
 
