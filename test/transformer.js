@@ -4,6 +4,10 @@ var path = require("path");
 var fs = require("fs");
 var sinon = require("sinon");
 var pathutils = require("./../pathutils.js");
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+var chai = require("chai");
+var expect = chai.expect;
 
 var rootDir = path.dirname(__dirname);
 
@@ -45,6 +49,10 @@ describe("transformer.js", function() {
         var output = transformer.process("path1", "path2");
         var contained = output.indexOf("Hello World") > -1;
         assert.equal(contained, true);
+
+        var dom = new JSDOM(output);
+        var title = dom.window.document.title;
+        expect(title).to.equal("Hello World");
 
     });
 

@@ -4,6 +4,7 @@ const { JSDOM } = jsdom;
 var showdown = require("showdown");
 converter = new showdown.Converter();
 var pathutils = require("./pathutils.js");
+var titleparser = require("./titleparser.js");
 
 // ============================================================================
 
@@ -33,6 +34,12 @@ var process = function(templatePath, mdPath) {
     // Parse MD file
     var compiledMD = converter.makeHtml(mdString);
     targetElement.innerHTML = compiledMD;
+
+    // Parse title
+    var pageTitle = titleparser.parseTitle(mdString);
+    if (pageTitle != "") {
+        templateDom.window.document.title = pageTitle;
+    }
 
     // Get modified document
     var outputDocumentString = templateDom.serialize();

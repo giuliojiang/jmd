@@ -151,7 +151,6 @@ describe("appgetroute.js", function() {
             appgetroute.handleGet(d.context, req, "", d.res);
 
             var redirectArgs = fakes.expressresponse.redirect.getCall(0).args;
-            console.info("redirectargs are " + JSON.stringify(redirectArgs));
             expect(fakes.appgetroute.handlePage.called).to.be.false;
 
         });
