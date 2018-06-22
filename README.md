@@ -2,6 +2,8 @@
 
 JMD is a lightweight express-based app to quickly generate a website from markdown files.
 
+![Example website](https://osr.jstudios.ovh/)
+
 # Quickstart
 
 Add JMD to your Node.js project. If you don't have a project yet, use `npm init` (See https://docs.npmjs.com/cli/init).
