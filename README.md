@@ -2,7 +2,7 @@
 
 JMD is a lightweight express-based app to quickly generate a website from markdown files.
 
-![Example website](https://osr.jstudios.ovh/)
+[Example website](https://osr.jstudios.ovh/)
 
 # Quickstart
 
